@@ -1,0 +1,11 @@
+FROM amazonlinux:2
+
+RUN yum install -y zip wget tar gzip git
+RUN wget https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz
+RUN tar -C / -xzf go1.12.7.linux-amd64.tar.gz
+ENV PATH $PATH:/go/bin
+WORKDIR /go
+
+RUN go get -u github.com/aws/aws-lambda-go/events
+RUN go get -u github.com/aws/aws-lambda-go/lambda
+

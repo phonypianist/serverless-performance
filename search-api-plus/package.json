@@ -1,0 +1,7 @@
+{
+  "name": "search-api-serverless",
+  "version": "1.0.0",
+  "dependencies": {
+    "serverless-python-requirements": "^4.3.0"
+  }
+}

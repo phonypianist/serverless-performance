@@ -1,0 +1,78 @@
+service: search-api
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: ${opt:stage, self:custom.defaultStage}
+  profile: ${opt:profile, self:custom.defaultProfile}
+  region: ${opt:region, self:custom.defaultRegion}
+  memorySize: ${opt:memorySize, self:custom.defaultMemorySize}
+  timeout: 15
+
+custom:
+  defaultStage: staging
+  defaultProfile: default
+  defaultRegion: ap-northeast-1
+  defaultMemorySize: 256
+
+package:
+  individually: true
+
+functions:
+  SearchPython:
+    handler: src/main/python/search.lambda_handler
+    runtime: python3.7
+    package:
+      include:
+        - src/main/python/search.py
+    events:
+      - http:
+          path: search-python/{number}
+          method: get
+          integration: lambda-proxy
+  SearchJavaScript:
+    handler: src/main/js/search.handler
+    runtime: nodejs10.x
+    package:
+      include:
+        - src/main/js/search.js
+    events:
+      - http:
+          path: search-js/{number}
+          method: get
+          integration: lambda-proxy
+  SearchJava:
+    handler: phonypianist.search.Search
+    runtime: java8
+    package:
+      artifact: target/search-api-1.0.0-aws.jar
+    events:
+      - http:
+          path: search-java/{number}
+          method: get
+          integration: lambda-proxy
+  SearchGo:
+    handler: search
+    runtime: go1.x
+    package:
+      artifact: bin/search-go.zip
+    events:
+      - http:
+          path: search-go/{number}
+          method: get
+          integration: lambda-proxy
+
+resources:
+  Resources:
+    SearchPythonLogGroup:
+      Properties:
+        RetentionInDays: 3
+    SearchJavaScriptLogGroup:
+      Properties:
+        RetentionInDays: 3
+    SearchJavaLogGroup:
+      Properties:
+        RetentionInDays: 3
+    SearchGoLogGroup:
+      Properties:
+        RetentionInDays: 3

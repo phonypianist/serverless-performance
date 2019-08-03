@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  gobuild:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.gobuild
+    command: >
+      bash -c "
+        rm -f /build/search* &&
+        go build -o /build/search /code/search.go &&
+        zip -j -o /build/search-go.zip /build/search
+      "
+    volumes:
+      - ./src/main/go:/code
+      - ./bin:/build
