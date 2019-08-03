@@ -2,9 +2,11 @@
 
 ## How to execute performance test
 
-In `pom.xml`, enable target simulation by modifying `includes` configuration of `gatling-maven-plugin`.
+First, modify `src/test/java/karate-config.js` according to your environment.
 
-And execute following:
+Next, in `pom.xml`, enable target simulation by modifying `includes` configuration of `gatling-maven-plugin`.
+
+And last, execute following:
 
 ```
 mvn clean test-compile gatling:test
